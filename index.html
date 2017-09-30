@@ -3,9 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
+  <title>Visca El Barca!</title>
   <link rel="stylesheet" href="./static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-  <script src="./static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <script>
+    window.$ = require("./static/jquery-3.2.1.min.js")
+  </script>
 </head>
 
 <body>
@@ -14,58 +16,92 @@
       margin-top: 20px;
       margin-bottom: 20px;
     }
+
+    .grid {
+      display: none
+    }
   </style>
   <div class="container">
     <div class="container-fluid">
+      <!-- Banner -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Next Match</h3>
+        </div>
+        <div class="btn" id="banner"><img src="./static/img/loading_banner.gif"></div>
+      </div>
+
+      <ul class="nav nav-tabs">
+        <li id="tab_ranking" class="active"><a href="#">Ranking</a></li>
+        <li id="tab_players"><a href="#">Players</a></li>
+      </ul>
 
       <!-- Ranking -->
-      <div class="panel panel-warning" style="display:none">
-        <div class="panel-heading">
-          <h3 class="panel-title">Ranking List</h3>
+      <div class="panel grid" id="ranking-container">
+        <div class="panel-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Position</th>
+                <th>Team</th>
+                <th>Played</th>
+                <th>Won</th>
+                <th>Drawn</th>
+                <th>Lost</th>
+                <th>Goal</th>
+                <th>Against</th>
+                <th>Goal Difference</th>
+                <th>Points</th>
+              </tr>
+            </thead>
+            <tbody id="ranking"></tbody>
+          </table>
         </div>
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Position</th>
-              <th>Team</th>
-              <th>Played</th>
-              <th>Won</th>
-              <th>Drawn</th>
-              <th>Lost</th>
-              <th>Goal</th>
-              <th>Against</th>
-              <th>Goal Difference</th>
-              <th>Points</th>
-            </tr>
-          </thead>
-          <tbody id="ranking"></tbody>
-        </table>
       </div>
 
       <!-- Players -->
-      <div class="panel panel-warning">
-        <div class="panel-heading">
-          <h3 class="panel-title">Top Scorers</h3>
+      <div class="panel grid" id="players-container">
+        <div class="panel-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Club</th>
+                <th>Goals</th>
+              </tr>
+            </thead>
+            <tbody id="players"></tbody>
+          </table>
         </div>
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Player</th>
-              <th>Club</th>
-              <th>Goals</th>
-            </tr>
-          </thead>
-          <tbody id="players"></tbody>
-        </table>
       </div>
 
     </div>
   </div>
   <script>
-    window.$ = require("./static/jquery-3.2.1.min.js")
-
     let barca = {
+      init: function () {
+        this.banner()
+        this.ranking()
+        this.players()
+        this.binding()
+        $("#ranking-container").show()
+      },
+      binding: function () {
+        $("#tab_ranking").bind("click", function () {
+          $("#ranking-container").show()
+          $("#players-container").hide()
+          $("#tab_ranking").addClass("active")
+          $("#tab_players").removeClass("active")
+        })
+
+        $("#tab_players").bind("click", function () {
+          $("#ranking-container").hide()
+          $("#players-container").show()
+          $("#tab_ranking").removeClass("active")
+          $("#tab_players").addClass("active")
+        })
+      },
       ranking: function () {
         $.get("http://www.espnfc.com/spanish-primera-division/15/table", function (response) {
           let html = $(response)
@@ -105,16 +141,16 @@
           $("#ranking").html(body)
         })
       },
-      players : function(){
-        $.get("http://www.espnfc.com/spanish-primera-division/15/statistics/scorers", function(response){
+      players: function () {
+        $.get("http://www.espnfc.com/spanish-primera-division/15/statistics/scorers", function (response) {
           let html = $(response)
           let playerList = []
 
-          html.find("#stats-top-scorers table tbody tr").each(function(){
+          html.find("#stats-top-scorers table tbody tr").each(function () {
             let row = $(this).children()
             let player = []
 
-            row.each(function(){
+            row.each(function () {
               player.push($(this).text())
             })
 
@@ -123,7 +159,7 @@
 
           let body = ""
 
-          for (let row of playerList){
+          for (let row of playerList) {
             let tr = "<tr>"
 
             if (row[2] === "Barcelona") {
@@ -141,10 +177,31 @@
 
           $("#players").html(body)
         })
-      }
+      },
+      banner: function () {
+        $.get("http://www.espnfc.com/club/barcelona/83/fixtures", function (response) {
+          let html = $(response)
+
+          let date = html.find(".next-match h3 span").text()
+          let teamName = ""
+          let teamLogoURL = ""
+
+          html.find('.next-match .team-name').each(function () {
+            let name = $(this).text().replace(/(^\s*)|(\s*$)/g, "")
+            let img = $(this).find("img").attr("src")
+
+            if (name !== "Barcelona") {
+              teamName = name
+              teamLogoURL = img
+            }
+
+            $("#banner").html("<img src='" + teamLogoURL + "'>" + teamName + " " + date)
+          })
+        })
+      },
     }
 
-    barca.players()
+    barca.init()
   </script>
 </body>
 
