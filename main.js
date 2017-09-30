@@ -5,7 +5,7 @@ const url = require("url")
 function createWindow() {
   let win
 
-  win = new BrowserWindow({ width: 800, height: 600 })
+  win = new BrowserWindow({ width: 1280, height: 720 })
 
   win.loadURL(
     url.format({
