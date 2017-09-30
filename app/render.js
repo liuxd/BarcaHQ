@@ -7,23 +7,27 @@ let barca = {
     $("#ranking-container").show()
   },
   binding: function() {
+    // Tab buttons
     $("li").each(function() {
       $(this).bind("click", function() {
-        $("li").each(function() {
+        // Remove all "active" class
+        $("li.active").each(function() {
           $(this).removeClass("active")
         })
 
+        // Hide all tables
         $(".grid").each(function(){
           $(this).hide()
         })
 
+        // Get mark for ID.
         let mark = $(this)
           .addClass("active")
           .attr("id")
           .substring(4)
 
+        // Show the right table
         $("#" + mark + "-container").show()
-        console.log("#" + mark + "-container")
       })
     })
   },
