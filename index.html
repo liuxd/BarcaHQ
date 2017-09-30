@@ -17,7 +17,9 @@
   </style>
   <div class="container">
     <div class="container-fluid">
-      <div class="panel panel-warning">
+
+      <!-- Ranking -->
+      <div class="panel panel-warning" style="display:none">
         <div class="panel-heading">
           <h3 class="panel-title">Ranking List</h3>
         </div>
@@ -39,48 +41,110 @@
           <tbody id="ranking"></tbody>
         </table>
       </div>
+
+      <!-- Players -->
+      <div class="panel panel-warning">
+        <div class="panel-heading">
+          <h3 class="panel-title">Top Scorers</h3>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Club</th>
+              <th>Goals</th>
+            </tr>
+          </thead>
+          <tbody id="players"></tbody>
+        </table>
+      </div>
+
     </div>
   </div>
   <script>
     window.$ = require("./static/jquery-3.2.1.min.js")
 
-    $.get("http://www.espnfc.com/spanish-primera-division/15/table", function (response) {
-      let html = $(response)
-      let teamList = []
+    let barca = {
+      ranking: function () {
+        $.get("http://www.espnfc.com/spanish-primera-division/15/table", function (response) {
+          let html = $(response)
+          let teamList = []
 
-      html.find("#tables-overall table tbody tr").each(function () {
-        let row = $(this).children()
-        let team = []
+          html.find("#tables-overall table tbody tr").each(function () {
+            let row = $(this).children()
+            let team = []
 
-        row.each(function () {
-          team.push($(this).text())
+            row.each(function () {
+              team.push($(this).text())
+            })
+
+            if (team[0] !== "POS") {
+              teamList.push([team[0], team[1].replace(/(^\s*)|(\s*$)/g, ""), team[3], team[4], team[5], team[6], team[7], team[8], team[22], team[23]])
+            }
+          })
+
+          let body = ""
+
+          for (let row of teamList) {
+            let tr = "<tr>"
+
+            if (row[1] === "Barcelona") {
+              tr = "<tr class='success'>"
+            }
+
+            for (let td of row) {
+              tr += "<td>" + td + "</td>"
+            }
+
+            tr += "</td>"
+
+            body += tr
+          }
+
+          $("#ranking").html(body)
         })
+      },
+      players : function(){
+        $.get("http://www.espnfc.com/spanish-primera-division/15/statistics/scorers", function(response){
+          let html = $(response)
+          let playerList = []
 
-        if (team[0] !== "POS") {
-          teamList.push([team[0], team[1].replace(/(^\s*)|(\s*$)/g, ""), team[3], team[4], team[5], team[6], team[7], team[8], team[22], team[23]])
-        }
-      })
+          html.find("#stats-top-scorers table tbody tr").each(function(){
+            let row = $(this).children()
+            let player = []
 
-      let body = ""
+            row.each(function(){
+              player.push($(this).text())
+            })
 
-      for (let row of teamList) {
-        let tr = "<tr>"
+            playerList.push(player)
+          })
 
-        if (row[1] === "Barcelona") {
-          tr = "<tr class='success'>"
-        }
+          let body = ""
 
-        for (let td of row) {
-          tr += "<td>" + td + "</td>"
-        }
+          for (let row of playerList){
+            let tr = "<tr>"
 
-        tr += "</td>"
+            if (row[2] === "Barcelona") {
+              tr = "<tr class='success'>"
+            }
 
-        body += tr
+            for (let td of row) {
+              tr += "<td>" + td + "</td>"
+            }
+
+            tr += "</td>"
+
+            body += tr
+          }
+
+          $("#players").html(body)
+        })
       }
+    }
 
-      $("#ranking").html(body)
-    })
+    barca.players()
   </script>
 </body>
 
