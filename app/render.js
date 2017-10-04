@@ -104,7 +104,7 @@ new Vue({
     })
   },
   methods: {
-    switchTab: function(tab) {
+    switchTab(tab) {
       if (tab == "players") {
         this.players_grid = true
         this.playersActive = true
@@ -119,22 +119,8 @@ new Vue({
         this.rankingActive = true
       }
     },
-    player_list: function() {
-      $.get("http://www.espnfc.com/spanish-primera-division/15/statistics/scorers", function(response) {
-        let html = $(response)
-        let playerList = []
-
-        html.find("#stats-top-scorers table tbody tr").each(function() {
-          let row = $(this).children()
-          let player = []
-
-          row.each(function() {
-            player.push($(this).text())
-          })
-
-          playerList.push(player)
-        })
-      })
+    trClass(clubName) {
+      return clubName === "Barcelona" ? "success" : ""
     }
   }
 })

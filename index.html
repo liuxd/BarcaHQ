@@ -43,7 +43,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="row in ranking_list">
+              <tr v-for="row in ranking_list" :class="[trClass(row[1])]">
                 <td v-for="td in row">{{td}}</td>
               </tr>
             </tbody>
@@ -61,7 +61,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="row in player_list">
+              <tr v-for="row in player_list" :class="[trClass(row[2])]">
                 <td v-for="td in row">{{td}}</td>
               </tr>
             </tbody>
