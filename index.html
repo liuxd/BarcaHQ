@@ -25,7 +25,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">Next Match</h3>
         </div>
-        <div class="btn" id="banner"><img :src="banner_img">{{banner_content}}</div>
+        <div class="btn"><img :src="banner_img">{{banner_content}}</div>
       </div>
 
       <ul class="nav nav-tabs">
@@ -42,7 +42,7 @@
                 <th v-for="th in ranking_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="ranking">
+            <tbody>
               <tr v-for="row in ranking_list">
                 <td v-for="td in row">{{td}}</td>
               </tr>
@@ -60,7 +60,7 @@
                 <th v-for="th in players_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="players">
+            <tbody>
               <tr v-for="row in player_list">
                 <td v-for="td in row">{{td}}</td>
               </tr>
