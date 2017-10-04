@@ -19,10 +19,38 @@ new Vue({
     rankingActive: true,
     playersActive: false,
     ranking_list: [],
-    player_list: []
+    player_list: [],
+    banner_img: "./app/img/loading_banner.gif",
+    banner_content: ""
   },
   created: function() {
     let that = this
+
+    // Banner
+    $.get("http://www.espnfc.com/club/barcelona/83/fixtures", function(response) {
+      let html = $(response)
+
+      let date = html.find(".next-match h3 span").text()
+      let teamName = ""
+      let teamLogoURL = ""
+
+      html.find(".next-match .team-name").each(function() {
+        let name = $(this)
+          .text()
+          .replace(/(^\s*)|(\s*$)/g, "")
+        let img = $(this)
+          .find("img")
+          .attr("src")
+
+        if (name !== "Barcelona") {
+          teamName = name
+          teamLogoURL = img
+        }
+
+        that.banner_img = teamLogoURL
+        that.banner_content = teamName + " " + date
+      })
+    })
 
     // Ranking List
     $.get("http://www.espnfc.com/spanish-primera-division/15/table", function(response) {
@@ -74,33 +102,6 @@ new Vue({
 
       that.player_list = playerList
     })
-  },
-  computed: {
-    banner: function() {
-      $.get("http://www.espnfc.com/club/barcelona/83/fixtures", function(response) {
-        let html = $(response)
-
-        let date = html.find(".next-match h3 span").text()
-        let teamName = ""
-        let teamLogoURL = ""
-
-        html.find(".next-match .team-name").each(function() {
-          let name = $(this)
-            .text()
-            .replace(/(^\s*)|(\s*$)/g, "")
-          let img = $(this)
-            .find("img")
-            .attr("src")
-
-          if (name !== "Barcelona") {
-            teamName = name
-            teamLogoURL = img
-          }
-
-          $("#banner").html("<img src='" + teamLogoURL + "'>" + teamName + " " + date)
-        })
-      })
-    }
   },
   methods: {
     switchTab: function(tab) {
