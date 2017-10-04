@@ -8,7 +8,9 @@
   <!-- Vender -->
   <link rel="stylesheet" href="./vender/bootstrap.min.css">
   <script src="./vender/vue.min.js"></script>
-  <script>window.$ = require("./vender/jquery-3.2.1.min.js")</script>
+  <script>
+    window.$ = require("./vender/jquery-3.2.1.min.js")
+  </script>
 
   <!-- App -->
   <link rel="stylesheet" href="./app/app.css">
@@ -40,7 +42,11 @@
                 <th v-for="th in ranking_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="ranking">{{ranking_list()}}</tbody>
+            <tbody id="ranking">
+              <tr v-for="row in ranking_list">
+                <td v-for="td in row">{{td}}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -54,7 +60,11 @@
                 <th v-for="th in players_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="players">{{player_list()}}</tbody>
+            <tbody id="players">
+              <tr v-for="row in player_list">
+                <td v-for="td in row">{{td}}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
