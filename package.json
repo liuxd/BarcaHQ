@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "main": "main.js",
   "scripts": {
-    "build": "electron-packager . BarcaHQ --out=dist/osx --platform=darwin --arch=x64 --icon=./static/img/logo.icns --electron-version=1.7.8"
+    "build": "electron-packager . BarcaHQ --out=dist/osx --platform=darwin --arch=x64 --icon=./app/img/logo.icns --electron-version=1.7.8"
   }
 }

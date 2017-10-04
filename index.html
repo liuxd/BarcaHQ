@@ -4,10 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Visca El Barca!</title>
-  <link rel="stylesheet" href="./static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-  <script>
-    window.$ = require("./static/jquery-3.2.1.min.js")
-  </script>
+
+  <!-- Vender -->
+  <link rel="stylesheet" href="./vender/bootstrap.min.css">
+  <script src="./vender/vue.min.js"></script>
+  <script>window.$ = require("./vender/jquery-3.2.1.min.js")</script>
+
 </head>
 
 <body>
@@ -16,62 +18,46 @@
       margin-top: 20px;
       margin-bottom: 20px;
     }
-
-    .grid {
-      display: none
-    }
   </style>
-  <div class="container">
+  <div class="container" id="app">
     <div class="container-fluid">
       <!-- Banner -->
       <div class="panel panel-primary">
         <div class="panel-heading">
           <h3 class="panel-title">Next Match</h3>
         </div>
-        <div class="btn" id="banner"><img src="./static/img/loading_banner.gif"></div>
+        <div class="btn" id="banner"><img src="./app/img/loading_banner.gif">{{banner}}</div>
       </div>
 
       <ul class="nav nav-tabs">
-        <li id="tab_ranking" class="active"><a href="#">Ranking</a></li>
-        <li id="tab_players"><a href="#">Players</a></li>
+        <li @click="switchTab('ranking')" :class="{active: rankingActive}"><a href="#">Ranking</a></li>
+        <li @click="switchTab('players')" :class="{active: playersActive}"><a href="#">Players</a></li>
       </ul>
 
       <!-- Ranking -->
-      <div class="panel grid" id="ranking-container">
+      <div class="panel" v-if="ranking_grid">
         <div class="panel-body">
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
-                <th>Position</th>
-                <th>Team</th>
-                <th>Played</th>
-                <th>Won</th>
-                <th>Drawn</th>
-                <th>Lost</th>
-                <th>Goal</th>
-                <th>Against</th>
-                <th>Goal Difference</th>
-                <th>Points</th>
+                <th v-for="th in ranking_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="ranking"></tbody>
+            <tbody id="ranking">{{ranking_list}}</tbody>
           </table>
         </div>
       </div>
 
       <!-- Players -->
-      <div class="panel grid" id="players-container">
+      <div class="panel" v-if="players_grid">
         <div class="panel-body">
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Club</th>
-                <th>Goals</th>
+                <th v-for="th in players_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="players"></tbody>
+            <tbody id="players">{{player_list}}</tbody>
           </table>
         </div>
       </div>
