@@ -32,6 +32,48 @@ new Vue({
     playersActive: false
   },
   computed: {
+    banner: function(){
+      $.get("http://www.espnfc.com/club/barcelona/83/fixtures", function(response) {
+        let html = $(response)
+
+        let date = html.find(".next-match h3 span").text()
+        let teamName = ""
+        let teamLogoURL = ""
+
+        html.find(".next-match .team-name").each(function() {
+          let name = $(this)
+            .text()
+            .replace(/(^\s*)|(\s*$)/g, "")
+          let img = $(this)
+            .find("img")
+            .attr("src")
+
+          if (name !== "Barcelona") {
+            teamName = name
+            teamLogoURL = img
+          }
+
+          $("#banner").html("<img src='" + teamLogoURL + "'>" + teamName + " " + date)
+        })
+      })
+    }
+  },
+  methods: {
+    switchTab: function(tab){
+      if (tab == "players") {
+        this.players_grid = true
+        this.playersActive = true
+
+        this.ranking_grid = false
+        this.rankingActive = false
+      } else {
+        this.players_grid = false
+        this.playersActive = false
+
+        this.ranking_grid = true
+        this.rankingActive = true
+      }
+    },
     ranking_list: function(){
       let tbody = ''
 
@@ -94,48 +136,6 @@ new Vue({
       })
 
       return tbody
-    },
-    banner: function(){
-      $.get("http://www.espnfc.com/club/barcelona/83/fixtures", function(response) {
-        let html = $(response)
-
-        let date = html.find(".next-match h3 span").text()
-        let teamName = ""
-        let teamLogoURL = ""
-
-        html.find(".next-match .team-name").each(function() {
-          let name = $(this)
-            .text()
-            .replace(/(^\s*)|(\s*$)/g, "")
-          let img = $(this)
-            .find("img")
-            .attr("src")
-
-          if (name !== "Barcelona") {
-            teamName = name
-            teamLogoURL = img
-          }
-
-          $("#banner").html("<img src='" + teamLogoURL + "'>" + teamName + " " + date)
-        })
-      })
-    }
-  },
-  methods: {
-    switchTab: function(tab){
-      if (tab == "players") {
-        this.players_grid = true
-        this.playersActive = true
-
-        this.ranking_grid = false
-        this.rankingActive = false
-      } else {
-        this.players_grid = false
-        this.playersActive = false
-
-        this.ranking_grid = true
-        this.rankingActive = true
-      }
     }
   }
 })

@@ -43,7 +43,7 @@
                 <th v-for="th in ranking_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="ranking">{{ranking_list}}</tbody>
+            <tbody id="ranking">{{ranking_list()}}</tbody>
           </table>
         </div>
       </div>
@@ -57,7 +57,7 @@
                 <th v-for="th in players_title">{{th}}</th>
               </tr>
             </thead>
-            <tbody id="players">{{player_list}}</tbody>
+            <tbody id="players">{{player_list()}}</tbody>
           </table>
         </div>
       </div>
