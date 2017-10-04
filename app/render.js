@@ -24,15 +24,26 @@ let tbodyHandler = function(target_id, rows, rowClassHandler) {
 new Vue({
   el: "#app",
   data: {
-    ranking_title: ["Position","Team","Played","Won","Drawn","Lost","Goal","Against","Goal Difference","Points"],
-    players_title: ["Rank","Player","Club","Goals"],
+    ranking_title: [
+      "Position",
+      "Team",
+      "Played",
+      "Won",
+      "Drawn",
+      "Lost",
+      "Goal",
+      "Against",
+      "Goal Difference",
+      "Points"
+    ],
+    players_title: ["Rank", "Player", "Club", "Goals"],
     ranking_grid: true,
     players_grid: false,
     rankingActive: true,
     playersActive: false
   },
   computed: {
-    banner: function(){
+    banner: function() {
       $.get("http://www.espnfc.com/club/barcelona/83/fixtures", function(response) {
         let html = $(response)
 
@@ -59,7 +70,7 @@ new Vue({
     }
   },
   methods: {
-    switchTab: function(tab){
+    switchTab: function(tab) {
       if (tab == "players") {
         this.players_grid = true
         this.playersActive = true
@@ -74,8 +85,8 @@ new Vue({
         this.rankingActive = true
       }
     },
-    ranking_list: function(){
-      let tbody = ''
+    ranking_list: function() {
+      let tbody = ""
 
       $.get("http://www.espnfc.com/spanish-primera-division/15/table", function(response) {
         let html = $(response)
@@ -112,8 +123,8 @@ new Vue({
 
       return tbody
     },
-    player_list: function(){
-      let tbody = ''
+    player_list: function() {
+      let tbody = ""
 
       $.get("http://www.espnfc.com/spanish-primera-division/15/statistics/scorers", function(response) {
         let html = $(response)
